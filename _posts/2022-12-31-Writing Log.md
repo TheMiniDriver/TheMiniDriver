@@ -7,7 +7,7 @@ Last March, I took on a small side job writing code tutorials and articles. I di
 
 I found a job posting on the ZA slack channel, posted by [Ritza](link). I answered, and was given a small task to write a [web sockets tutorial for Replit](link). I coded up the project, wrote the article, and sent it in. To my suprise, it was accepted, published, and I was asked to created more. Since then, I have spent about half an hour a day writing tutorials and other articles. 
 
-Why did I want to practice writing? Mainly because I had avoided it in the past because I wasn't sure if I was doing it (or write?). This way, I get feedback for every article I write. I feel that text is still a great way of communicating complex information, even though video seems to dominate now. I also think it's great for business communication - especially when explaining strategy. Plus I hate using powerpoint.
+Why did I want to practice writing? Mainly because I had avoided it in the past because I wasn't sure if I was doing it right (or write?). This way, I get feedback for every article I write. I feel that text is still a great way of communicating complex information, even though video seems to dominate now. I also think it's great for business communication - especially when explaining strategy. Plus I hate using powerpoint.
 
 Has it been worth it? I think so. I've gotten over my fear of writing, and trying to make it perfect. Up to now, all the articles I've written are pretty fomulaic code tutorials, explaining code one line at a time. I guess the code is my safety net. My next goal is to write more narrative driven articles. Or articles about something, rather than explaining something.
 
