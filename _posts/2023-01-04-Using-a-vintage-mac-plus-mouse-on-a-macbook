@@ -1,7 +1,7 @@
 
 ---
 layout: post
-title: Using a vintage Macintosh Plus M0100 Mouse on a new Macbook
+title: Using a vintage Macintosh Plus M0100 Mouse on a Macbook
 ---
 You can get the code for this project [here](https://github.com/TheMiniDriver/mac-plus-mouse-usb).
 
@@ -48,4 +48,5 @@ The procedure to revert to standard Arduino firmware (so that you can re-program
 1. Reset the 16u2 chip by shorting the reset pins 
 2. Upload the file [Arduino-usbserial-uno.hex](https://github.com/TheMiniDriver/mac-plus-mouse-usb/blob/master/arduino-firmware/Arduino-usbserial-uno.hex)  using your DFU programmer. If you are using macOS, you can use the shell script [prog-mode.sh](https://github.com/TheMiniDriver/mac-plus-mouse-usb/blob/master/arduino-firmware/prog-mode.sh) to upload the firmware. 
 3. Power cycle the Arduino UNO. You will now be able to access it as usual. 
+
 
