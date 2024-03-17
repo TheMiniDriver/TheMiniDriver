@@ -3,7 +3,7 @@ I've been writing a small demo app, and wanted to keep everything simple, meanin
 
 ## What Not to Do
 
-Initially, you might be tempted to use dots . to indicate nesting within your form field names, like so:
+Initially, because you are a normal person, you might be tempted to use dots `.` to indicate nesting within your form field names, like so:
 
 ```html
 <input type="hidden" name="user[0].id" value="123" />
@@ -25,34 +25,116 @@ Initially, you might be tempted to use dots . to indicate nesting within your fo
 
 ```
 
-This approach will not work as expected with `express.urlencoded({extended: true})`. It seems like it works with frameworks like Rails, based on Stackoverflow answers. 
+This approach will not work as expected with `express.urlencoded({extended: true})`, and will produce gibberish on the server side like this:
+
+```javascript
+{
+    "users": [
+        "123",
+        "john",
+        "doe",
+        [
+            "admin"
+        ],
+        [
+            "true"
+        ],
+        [
+            "billing"
+        ],
+        [
+            "false"
+        ],
+        "234",
+        "Bob",
+        "deer",
+        [
+            "admin"
+        ],
+        [
+            "false"
+        ],
+        [
+            "billing"
+        ],
+        [
+            "true"
+        ]
+    ]
+}
+
+```
+
+Fun!
 
 ## The Correct Method
 
-To properly indicate nested objects and arrays, use square brackets [] for all levels of nesting. This method works seamlessly with Express's URL-encoded parser when `{extended: true}` is enabled, allowing for accurate parsing of complex data structures.
+To indicate nested objects and arrays to express, you have to suspend your rational thoughts and use square brackets [] for all levels of nesting. This method works with Express's URL-encoded parser when `{extended: true}` is enabled, allowing for parsing of complex data structures.
 
 ### Example Form Structure
 
 Here's how you should structure your form inputs:
 
 ```html
-<input type="hidden" name="user[0][id]" value="123" />
-<input type="hidden" name="user[0][name]" value="John" />
-<input type="hidden" name="user[0][surname]" value="doe" />
-<input type="hidden" name="user[0][permissions][0][name]" value="admin" />
-<input type="hidden" name="user[0][permissions][0][state]" value="true" />
-<input type="hidden" name="user[0][permissions][0][name]" value="billing" />
-<input type="hidden" name="user[0][permissions][0][state]" value="false" />
+<input type="hidden" name="users[0][id]" value="123" />
+<input type="hidden" name="users[0][name]" value="John" />
+<input type="hidden" name="users[0][surname]" value="doe" />
+<input type="hidden" name="users[0][permissions][0][name]" value="admin" />
+<input type="hidden" name="users[0][permissions][0][state]" value="true" />
+<input type="hidden" name="users[0][permissions][0][name]" value="billing" />
+<input type="hidden" name="users[0][permissions][0][state]" value="false" />
 
 
-<input type="hidden" name="user[1][id]" value="234" />
-<input type="hidden" name="user[1][name]" value="Bob" />
-<input type="hidden" name="user[1][surname]" value="deer" />
-<input type="hidden" name="user[1][permissions[0][name]" value="admin" />
-<input type="hidden" name="user[1][permissions[0][state]" value="false" />
-<input type="hidden" name="user[1][permissions[1][name]" value="billing" />
-<input type="hidden" name="user[1][permissions[1][state]" value="true" />
+<input type="hidden" name="users[1][id]" value="234" />
+<input type="hidden" name="users[1][name]" value="Bob" />
+<input type="hidden" name="users[1][surname]" value="deer" />
+<input type="hidden" name="users[1][permissions[0][name]" value="admin" />
+<input type="hidden" name="users[1][permissions[0][state]" value="false" />
+<input type="hidden" name="users[1][permissions[1][name]" value="billing" />
+<input type="hidden" name="users[1][permissions[1][state]" value="true" />
 ```
+
+This will result in beautiful objects server side like this:
+
+```json
+
+{
+    "users": [
+        {
+            "id": "123",
+            "name": "John",
+            "surname": "doe",
+            "permissions": [
+                {
+                    "name": [
+                        "admin",
+                        "billing"
+                    ],
+                    "state": [
+                        "true",
+                        "false"
+                    ]
+                }
+            ]
+        },
+        {
+            "0": {
+                "name": "admin",
+                "state": "false"
+            },
+            "1": {
+                "name": "billing",
+                "state": "true"
+            },
+            "id": "234",
+            "name": "Bob",
+            "surname": "deer"
+        }
+    ]
+}
+```
+
+Yay!
 
 Of course, your inputs don't have to be hidden, they can be any type.
 
