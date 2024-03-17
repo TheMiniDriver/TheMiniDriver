@@ -6,8 +6,23 @@ I've been writing a small demo app, and wanted to keep everything simple, meanin
 Initially, you might be tempted to use dots . to indicate nesting within your form field names, like so:
 
 ```html
-<input type="hidden" name="user.name" value="John Doe" />
-<input type="hidden" name="user.permissions[0]" value="admin" />
+<input type="hidden" name="user[0].id" value="123" />
+<input type="hidden" name="user[0].name" value="john" />
+<input type="hidden" name="user[0].surname" value="doe" />
+<input type="hidden" name="user[0].permissions[0].name" value="admin" />
+<input type="hidden" name="user[0].permissions[0].state" value="true" />
+<input type="hidden" name="user[0].permissions[1].name" value="billing" />
+<input type="hidden" name="user[0].permissions[1].state" value="false" />
+
+
+<input type="hidden" name="user[1].id" value="234" />
+<input type="hidden" name="user[1].name" value="Bob" />
+<input type="hidden" name="user[1].surname" value="deer" />
+<input type="hidden" name="user[1].permissions[0].name" value="admin" />
+<input type="hidden" name="user[1].permissions[0].state" value="false" />
+<input type="hidden" name="user[1].permissions[1].name" value="billing" />
+<input type="hidden" name="user[1].permissions[1].state" value="true" />
+
 ```
 
 This approach will not work as expected with `express.urlencoded({extended: true})`. It seems like it works with frameworks like Rails, based on Stackoverflow answers. 
@@ -21,12 +36,25 @@ To properly indicate nested objects and arrays, use square brackets [] for all l
 Here's how you should structure your form inputs:
 
 ```html
-<input type="hidden" name="users[0][id]" value="123" />
-<input type="hidden" name="users[0][name]" value="bob" />
-<input type="hidden" name="users[0][surname]" value="banana" />
-<input type="hidden" name="users[0][permissions][0][name]" value="admin" />
-<input type="hidden" name="users[0][permissions][0][state]" value="on" />
+<input type="hidden" name="user[0][id]" value="123" />
+<input type="hidden" name="user[0][name]" value="John" />
+<input type="hidden" name="user[0][surname]" value="doe" />
+<input type="hidden" name="user[0][permissions][0][name]" value="admin" />
+<input type="hidden" name="user[0][permissions][0][state]" value="true" />
+<input type="hidden" name="user[0][permissions][0][name]" value="billing" />
+<input type="hidden" name="user[0][permissions][0][state]" value="false" />
+
+
+<input type="hidden" name="user[1][id]" value="234" />
+<input type="hidden" name="user[1][name]" value="Bob" />
+<input type="hidden" name="user[1][surname]" value="deer" />
+<input type="hidden" name="user[1][permissions[0][name]" value="admin" />
+<input type="hidden" name="user[1][permissions[0][state]" value="false" />
+<input type="hidden" name="user[1][permissions[1][name]" value="billing" />
+<input type="hidden" name="user[1][permissions[1][state]" value="true" />
 ```
+
+Of course, your inputs don't have to be hidden, they can be any type.
 
 ### Parsing in Express
 
