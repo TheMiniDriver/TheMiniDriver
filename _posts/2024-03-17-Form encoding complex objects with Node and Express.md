@@ -6,22 +6,22 @@ I've been writing a small demo app, and wanted to keep everything simple, meanin
 Initially, because you are a normal person, you might be tempted to use dots `.` to indicate nesting within your form field names, like so:
 
 ```html
-<input type="hidden" name="user[0].id" value="123" />
-<input type="hidden" name="user[0].name" value="john" />
-<input type="hidden" name="user[0].surname" value="doe" />
-<input type="hidden" name="user[0].permissions[0].name" value="admin" />
-<input type="hidden" name="user[0].permissions[0].state" value="true" />
-<input type="hidden" name="user[0].permissions[1].name" value="billing" />
-<input type="hidden" name="user[0].permissions[1].state" value="false" />
+<input type="hidden" name="users[0].id" value="123" />
+<input type="hidden" name="users[0].name" value="john" />
+<input type="hidden" name="users[0].surname" value="doe" />
+<input type="hidden" name="users[0].permissions[0].name" value="admin" />
+<input type="hidden" name="users[0].permissions[0].state" value="true" />
+<input type="hidden" name="users[0].permissions[1].name" value="billing" />
+<input type="hidden" name="users[0].permissions[1].state" value="false" />
 
 
-<input type="hidden" name="user[1].id" value="234" />
-<input type="hidden" name="user[1].name" value="Bob" />
-<input type="hidden" name="user[1].surname" value="deer" />
-<input type="hidden" name="user[1].permissions[0].name" value="admin" />
-<input type="hidden" name="user[1].permissions[0].state" value="false" />
-<input type="hidden" name="user[1].permissions[1].name" value="billing" />
-<input type="hidden" name="user[1].permissions[1].state" value="true" />
+<input type="hidden" name="users[1].id" value="234" />
+<input type="hidden" name="users[1].name" value="Bob" />
+<input type="hidden" name="users[1].surname" value="deer" />
+<input type="hidden" name="users[1].permissions[0].name" value="admin" />
+<input type="hidden" name="users[1].permissions[0].state" value="false" />
+<input type="hidden" name="users[1].permissions[1].name" value="billing" />
+<input type="hidden" name="users[1].permissions[1].state" value="true" />
 
 ```
 
@@ -81,17 +81,17 @@ Here's how you should structure your form inputs:
 <input type="hidden" name="users[0][surname]" value="doe" />
 <input type="hidden" name="users[0][permissions][0][name]" value="admin" />
 <input type="hidden" name="users[0][permissions][0][state]" value="true" />
-<input type="hidden" name="users[0][permissions][0][name]" value="billing" />
-<input type="hidden" name="users[0][permissions][0][state]" value="false" />
+<input type="hidden" name="users[0][permissions][1][name]" value="billing" />
+<input type="hidden" name="users[0][permissions][1][state]" value="false" />
 
 
 <input type="hidden" name="users[1][id]" value="234" />
 <input type="hidden" name="users[1][name]" value="Bob" />
 <input type="hidden" name="users[1][surname]" value="deer" />
-<input type="hidden" name="users[1][permissions[0][name]" value="admin" />
-<input type="hidden" name="users[1][permissions[0][state]" value="false" />
-<input type="hidden" name="users[1][permissions[1][name]" value="billing" />
-<input type="hidden" name="users[1][permissions[1][state]" value="true" />
+<input type="hidden" name="users[1][permissions][0][name]" value="admin" />
+<input type="hidden" name="users[1][permissions][0][state]" value="false" />
+<input type="hidden" name="users[1][permissions][1][name]" value="billing" />
+<input type="hidden" name="users[1][permissions][1][state]" value="true" />
 ```
 
 This will result in beautiful objects server side like this:
@@ -106,29 +106,29 @@ This will result in beautiful objects server side like this:
             "surname": "doe",
             "permissions": [
                 {
-                    "name": [
-                        "admin",
-                        "billing"
-                    ],
-                    "state": [
-                        "true",
-                        "false"
-                    ]
+                    "name": "admin",
+                    "state": "true"
+                },
+                {
+                    "name": "billing",
+                    "state": "false"
                 }
             ]
         },
         {
-            "0": {
-                "name": "admin",
-                "state": "false"
-            },
-            "1": {
-                "name": "billing",
-                "state": "true"
-            },
             "id": "234",
             "name": "Bob",
-            "surname": "deer"
+            "surname": "deer",
+            "permissions": [
+                {
+                    "name": "admin",
+                    "state": "false"
+                },
+                {
+                    "name": "billing",
+                    "state": "true"
+                }
+            ]
         }
     ]
 }
