@@ -158,6 +158,6 @@ This setup allows you to access deeply nested form data directly from req.body i
 One thing I had forgotten was how to get `<input type="checkbox">` to POST a value whether it is checked or unchecked. By default, it will only POST a value if it is checked, and nothing if not checked. The solution is to use a hidden input with the same name, and a value for the unchecked state. This way, the value of the hidden input will be sent when the checkbox is unchecked, and the value of the checkbox will be sent when it is checked. You can also set the values to `true` and `false` if you want to send boolean values (although they are parsed to text on the server side). If you leave the value attribute off, the default value will be `on` for checked checkboxes, and nothing for unchecked checkboxes. GPT4 did know this one!
 
 ```html
-    <input type="hidden" value="false" name="users[{{userIndex}}][permissions][{{permIndex}}][permissionState]"/>
-    <input type="checkbox" value="true" name="users[{{userIndex}}][permissions][{{permIndex}}][permissionState]" {{#if perm.hasPermission}} checked {{/if}}>
+    <input type="hidden" value="false" name="users[0][permissions][0][permissionState]"/>
+    <input type="checkbox" value="true" name="users[0][permissions][0][permissionState]" checked>
 ```
