@@ -1,9 +1,11 @@
 
-I've been writing a small demo app, and wanted to keep everything simple, meaning no SPA / frontend frameworks. So I made an express app, with handlebars. I was trying to do a form post with a complex object, including arrays. I ran into an issue on the syntax of the input names so that the object is properly parsed by express. 
+# Forms: Encoding Complex Objects with Node and Express
+
+I've been writing a small demo app, and wanted to keep everything simple, meaning no SPA / frontend frameworks. So I made an express app, with handlebars and just HTML form posts. I was trying to do a form post with a complex object, including arrays. I ran into an issue on the syntax of the input names so that the object is properly parsed by express. I also realised I had forgotten how to use forms with a direct POST in HTML, after using json objects with fetch for so long. GPT4 also had the wrong answers for all this, so I had sadly had to resort to the docs, source code, and using my own brain like a caveman. Hopefully this post provides some training data for GPT5.
 
 ## What Not to Do
 
-Initially, because you are a normal person, you might be tempted to use dots `.` to indicate nesting within your form field names, like so:
+Initially, you (and GPT4) might be tempted to use dots `.` to indicate nesting within your form field names, like so:
 
 ```html
 <input type="hidden" name="users[0].id" value="123" />
@@ -69,7 +71,7 @@ Fun!
 
 ## The Correct Method
 
-To indicate nested objects and arrays to express, you have to suspend your rational thoughts and use square brackets [] for all levels of nesting. This method works with Express's URL-encoded parser when `{extended: true}` is enabled, allowing for parsing of complex data structures.
+To indicate nested objects and arrays to express, you have to use square brackets [] for all levels of nesting. This method works with Express's URL-encoded parser when `{extended: true}` is enabled, allowing for parsing of complex data structures.
 
 ### Example Form Structure
 
@@ -150,3 +152,12 @@ app.use(express.urlencoded({ extended: true }));
 ```
 
 This setup allows you to access deeply nested form data directly from req.body in your route handlers, making it much easier to work with complex data submissions.
+
+## Using "checkbox" Inputs
+
+One thing I had forgotten was how to get `<input type="checkbox">` to POST a value whether it is checked or unchecked. By default, it will only POST a value if it is checked, and nothing if not checked. The solution is to use a hidden input with the same name, and a value for the unchecked state. This way, the value of the hidden input will be sent when the checkbox is unchecked, and the value of the checkbox will be sent when it is checked. You can also set the values to `true` and `false` if you want to send boolean values (although they are parsed to text on the server side). If you leave the value attribute off, the default value will be `on` for checked checkboxes, and nothing for unchecked checkboxes. GPT4 did know this one!
+
+```html
+    <input type="hidden" value="false" name="users[{{userIndex}}][permissions][{{permIndex}}][permissionState]"/>
+    <input type="checkbox" value="true" name="users[{{userIndex}}][permissions][{{permIndex}}][permissionState]" {{#if perm.hasPermission}} checked {{/if}}>
+```
